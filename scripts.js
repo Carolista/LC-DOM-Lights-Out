@@ -1,7 +1,7 @@
-/*** LIGHTS OUT ***/
+/**** LIGHTS OUT ****/
 
 /*
-    My own little take on the classic game of lights out, just to experiment with the DOM
+    My own little take on the classic game of Lights Out, just to experiment with the DOM
 */
 
 // Event listener for page load
@@ -55,23 +55,29 @@ function init() {
         for (let i=0; i < groupAffected.length; i++) {
             if (rgbToHex(groupAffected[i].style.backgroundColor) === base) {
                 groupAffected[i].style.backgroundColor = lightColor;
-                groupAffected[i].style.boxShadow = "0px 0px 20px 2px " + lightColor;
                 groupAffected[i].style.border = "2px solid " + lightColor;
+                groupAffected[i].style.boxShadow = "0px 0px 15px 0px " + lightColor;
+                groupAffected[i].style.animation = "pulse 3s infinite";
             } else {
                 groupAffected[i].style.backgroundColor = base;
-                groupAffected[i].style.boxShadow = "none";
                 groupAffected[i].style.border = "2px solid " + "#333";
+                groupAffected[i].style.boxShadow = "none";
+                groupAffected[i].style.animation = "none";
             }
         } 
     }
 
-    // Creates random arrangment for new game
+    // Create random arrangment for new game
     function setLights() {
         for (let i=0; i < lights.length; i++) {
             let selection = randomize(2);
             if (selection === 0) {
                 toggleLights(lights[i]);
             }
+        }
+        // prevent the rare possibility of starting with all lights off
+        if (checkLights()) {
+            setLights(); // recursive
         }
     }
 
@@ -85,10 +91,10 @@ function init() {
         return true; // if all lights were dark
     }
 
-    // use event delegation to listen for any click events
+    // Use event delegation to listen for any click events
     document.addEventListener("click", function(event) {
 
-        // when user clicks on light
+        // When user clicks on a light
         if (event.target.matches(".light") && !gameOver) {
             toggleLights(event.target);
             numCurrentMoves += 1;
@@ -101,12 +107,12 @@ function init() {
                 currentMoves.innerHTML = "You completed that round in " + numCurrentMoves + " moves.";
                 if (numCurrentMoves < numBestMoves) {
                     numBestMoves = numCurrentMoves;
-                    bestMoves.innerHTML = numBestMoves;
+                    bestMoves.innerHTML = numBestMoves + " moves";
                 }
             }        
         }
 
-        // when user clicks on "New Game?"
+        // When user clicks on "New Game?"
         if (event.target.id === "new-game") {
             setLights();
             gameOver = false;
@@ -119,6 +125,9 @@ function init() {
         }
 
     });
+
+
+    /** Miscellaneous Helper Functions **/
 
     function componentToHex(c) {
         var hex = c.toString(16);

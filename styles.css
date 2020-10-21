@@ -20,25 +20,29 @@ body {
     box-sizing: border-box;
 }
 
-/* header {
-	background-color: #222;
-    height: 140px;
-    padding: 20px 120px;
+header {
+    height: 100px;
+    padding: 15px 120px;
     box-sizing: border-box;
-} */
+}
 
 main {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 100%;
-    height: 100%;
-    padding: 30px;
+    width: 100vw;
+    height: calc(100vh - 100px);
+    padding: 30px 120px;
     box-sizing: border-box;
 }
 
 section {
+    display: flex;
+    position: relative;
     margin: 0px;
+    padding: 15px;
+    justify-content: center;
+    align-content: center;
 }
 
 div {
@@ -47,16 +51,19 @@ div {
 	padding: 0px;
 }
 
-h1 { 
-    /* Google font here if you want */
-	font-size: 2.5rem;
+h1 {
+    font-size: 3.5rem;
+    text-align: center;
+    margin: 0px;
 }
 
 h2 { 
-	font-size: 1rem;
-    font-weight: 300;
+	font-size: 1.8rem;
+    font-weight: 200;
     letter-spacing: 2px;
     text-transform: uppercase;
+    text-align: center;
+    margin: 0px;
 }
 
 h3 {
@@ -100,8 +107,10 @@ button:focus {
 	margin: 0px 0px 10px;  
 }
 
-#tagline {
+#best-moves {
     color: #bada55;
+    font-size: 2rem;
+    font-weight: 700;
 	text-align: center;
 	margin: 0px;  
 }
@@ -129,7 +138,7 @@ button:focus {
 
 #new-game {
     color: #bada55;
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: 200;
     text-align: center;
     cursor: pointer;
@@ -145,14 +154,11 @@ button:focus {
     justify-content: center;
 }
 
-.light {
-    background-color: #bada55; /* badass */
-    height: 50px;
-    width: 50px;
-    margin: 3px;
-    border: 2px solid #bada55; /* more badass */
-    border-radius: 3px;
-    box-shadow: 0px 0px 20px 2px #bada55; /* even more badass! */    
+.above-grid {
+    display: flex;
+    flex-direction: column;
+    height: 80;
+    justify-content: center;
 }
 
 .below-grid {
@@ -162,3 +168,30 @@ button:focus {
     justify-content: center;
 }
 
+/* LIGHTS */
+
+.light {
+    background-color: #bada55; /* badass */
+    height: 50px;
+    width: 50px;
+    margin: 3px;
+    border: 2px solid #bada55; /* more badass */
+    border-radius: 3px;
+    box-shadow: 0px 0px 15px 0px #bada55; /* even more badass! */  
+    animation: pulse 3s infinite;  
+}
+
+
+@keyframes pulse {
+	0% {
+		box-shadow: 0 0 15px 0px rgba(186, 218, 85, 0.2);
+	}
+
+	40% {
+		box-shadow: 0 0 15px 2px rgba(186, 218, 85, 0.8);
+	}
+
+	100% {
+		box-shadow: 0 0 15px 0px rgba(186, 218, 85, 0.2);
+	}
+}
