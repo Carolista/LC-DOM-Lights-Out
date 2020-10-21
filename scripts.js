@@ -15,8 +15,10 @@ function init() {
 
     let lightColor = "#bada55" // badass!
     let base = "#222222";
+    let gameOver = false;
 
     // get some objects from page
+    let lightGrid = document.getElementById("light-grid");
     let lights = document.getElementsByClassName("light");
     let congrats = document.getElementById("congrats");
     let newGame = document.getElementById("new-game");
@@ -60,7 +62,7 @@ function init() {
         } 
     }
 
-    // Starts new game with random arrangement
+    // Creates random arrangment for new game
     function setLights() {
         for (let i=0; i < lights.length; i++) {
             let selection = randomize(2);
@@ -84,9 +86,11 @@ function init() {
     document.addEventListener("click", function(event) {
 
         // when user clicks on light
-        if (event.target.matches(".light")) {
+        if (event.target.matches(".light") && !gameOver) {
             toggleLights(event.target);
             if (checkLights()) {
+                gameOver = true;
+                lightGrid.style.cursor = "default";
                 congrats.innerHTML = "YOU WIN!!!";
                 congrats.style.fontWeight = "700";
                 newGame.innerHTML = "New game?";
@@ -96,6 +100,8 @@ function init() {
         // when user clicks on "New Game?"
         if (event.target.id === "new-game") {
             setLights();
+            gameOver = false;
+            lightGrid.style.cursor = "pointer";
             congrats.innerHTML = "Good luck!";
             congrats.style.fontWeight = "400";
             newGame.innerHTML = "";
