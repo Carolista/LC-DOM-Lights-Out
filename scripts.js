@@ -15,6 +15,8 @@ function init() {
 
     let lightColor = "#bada55" // badass!
     let base = "#222222";
+    let numCurrentMoves = 0;
+    let numBestMoves = 0;
     let gameOver = false;
 
     // get some objects from page
@@ -22,6 +24,7 @@ function init() {
     let lights = document.getElementsByClassName("light");
     let congrats = document.getElementById("congrats");
     let newGame = document.getElementById("new-game");
+    let currentMoves = document.getElementById("current-moves");
 
     // initialize some stuff
     setLights();
@@ -88,12 +91,18 @@ function init() {
         // when user clicks on light
         if (event.target.matches(".light") && !gameOver) {
             toggleLights(event.target);
+            numCurrentMoves += 1;
             if (checkLights()) {
                 gameOver = true;
                 lightGrid.style.cursor = "default";
                 congrats.innerHTML = "YOU WIN!!!";
                 congrats.style.fontWeight = "700";
                 newGame.innerHTML = "New game?";
+                currentMoves.innerHTML = "You completed that round in " + numCurrentMoves + " moves.";
+                if (numCurrentMoves < numBestMoves) {
+                    numBestMoves = numCurrentMoves;
+                    bestMoves.innerHTML = numBestMoves;
+                }
             }        
         }
 
@@ -105,6 +114,8 @@ function init() {
             congrats.innerHTML = "Good luck!";
             congrats.style.fontWeight = "400";
             newGame.innerHTML = "";
+            numCurrentMoves = 0;
+            currentMoves.innerHTML = "";
         }
 
     });
