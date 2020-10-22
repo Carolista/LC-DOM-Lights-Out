@@ -24,9 +24,10 @@ function init() {
     let lightGrid = document.getElementById("light-grid");
     let lights = document.getElementsByClassName("light");
     let congrats = document.getElementById("congrats");
-    let newGame = document.getElementById("new-game");
     let currentMoves = document.getElementById("current-moves");
     let bestMoves = document.getElementById("best-moves");
+    let overlay = document.getElementById("overlay");
+    let gameBoard = document.getElementById("game-board");
 
     // initialize some stuff
     setLights();
@@ -39,13 +40,13 @@ function init() {
         if (rowIndex > 0) {
             group.push(document.getElementById("light" + (rowIndex - 1) + "-" + lightIndex)); // add light above
         } 
-        if (rowIndex < 3) {
+        if (rowIndex < 4) {
             group.push(document.getElementById("light" + (rowIndex + 1) + "-" + lightIndex)); // add light below
         }
         if (lightIndex > 0) {
             group.push(document.getElementById("light" + rowIndex + "-" + (lightIndex - 1))); // add light to left
         } 
-        if (lightIndex < 3) {
+        if (lightIndex < 4) {
             group.push(document.getElementById("light" + rowIndex + "-" + (lightIndex + 1))); // add light to right
         }
         return group; // objects relating to specific div elements on page
@@ -57,7 +58,6 @@ function init() {
         let lightColor;
         for (let i=0; i < groupAffected.length; i++) {
             let currentColor = rgbToHex(groupAffected[i].style.backgroundColor);
-            console.log(currentColor); // test - getting from page
             if (currentColor === base) {
                 lightColor = lightColors[randomize(lightColors.length)] // new random color for each light
                 groupAffected[i].style.backgroundColor = lightColor;
@@ -75,9 +75,8 @@ function init() {
 
     // Create random arrangment for new game
     function setLights() {
-        // Set all lights back to base color
+        // Set all lights back to base color - must do adjacents before lighting some up randomly
         for (let i=0; i < lights.length; i++) {
-            console.log("Setting light " + lights[i].id + " to base");
             lights[i].style.backgroundColor = base; 
             lights[i].style.borderColor = "#333";
         }
@@ -85,7 +84,6 @@ function init() {
         for (let j=0; j < lights.length; j++) {
             let selection = randomize(2);
             if (selection === 0) {
-                console.log("selected for random color")
                 toggleLights(lights[j]);
             }
         }
@@ -123,17 +121,16 @@ function init() {
         if (event.target.matches(".light") && !gameOver) {
             toggleLights(event.target);
             numCurrentMoves += 1;
-            console.log(numCurrentMoves); // testing
             if (checkLights()) {
                 gameOver = true;
                 lightGrid.style.cursor = "default";
                 congrats.innerHTML = getCongrats(numCurrentMoves);
-                congrats.style.fontWeight = "700";
-                newGame.innerHTML = "New game?";
-                currentMoves.innerHTML = "You completed that round in " + numCurrentMoves + " moves.";
+                currentMoves.innerHTML = "Round completed in " + numCurrentMoves + " moves.";
+                overlay.style.visibility = "visible";
+                gameBoard.style.visibility = "hidden";
                 if (numBestMoves.innerHTML === "no games yet" || numCurrentMoves < numBestMoves) {
                     numBestMoves = numCurrentMoves;
-                    bestMoves.innerHTML = numBestMoves + " moves";
+                    bestMoves.innerHTML = "Personal best: " + numBestMoves + " moves";
                 }
             }        
         }
@@ -142,12 +139,10 @@ function init() {
         if (event.target.id === "new-game") {
             setLights();
             gameOver = false;
+            gameBoard.style.visibility = "visible";
+            overlay.style.visibility = "hidden";
             lightGrid.style.cursor = "pointer";
-            congrats.innerHTML = "Good luck!";
-            congrats.style.fontWeight = "400";
-            newGame.innerHTML = "";
             numCurrentMoves = 0;
-            currentMoves.innerHTML = "";
         }
 
     });
