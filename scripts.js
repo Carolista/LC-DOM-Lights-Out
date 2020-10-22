@@ -16,9 +16,9 @@ function init() {
     let lightColors = ["#d4f764", "#fda16b", "#ffe56f", "#fc77a3", "#cb77fc", "#7784fc", "#77fcf1", "#77fc9f"];
     let base = "#222222";
     let numCurrentMoves = 0;
-    let numBestMoves = 0;
+    let numBestMoves = 999999999999999999; /* God help the person who breaks this */
     let gameOver = false;
-    let congratsOptions = ["Amazing!", "Outstanding!", "Stellar performance!", "Great job!", "Good work!", "You win!", "You did it!", "Woohoo!", "Hey, who turned the lights out?"];
+    let congratsOptions = ["Simply Amazing!", "Outstanding!", "Stellar performance!", "Great job!", "Good work!", "Hey, you won!", "You did it!", "Woohoo!", "Hey, who turned the lights out?"];
 
     // get some objects from page
     let lightGrid = document.getElementById("light-grid");
@@ -125,10 +125,10 @@ function init() {
                 gameOver = true;
                 lightGrid.style.cursor = "default";
                 congrats.innerHTML = getCongrats(numCurrentMoves);
-                currentMoves.innerHTML = "Round completed in " + numCurrentMoves + " moves.";
+                currentMoves.innerHTML = "Round completed in <strong>" + numCurrentMoves + "</strong> moves.";
                 overlay.style.visibility = "visible";
                 gameBoard.style.visibility = "hidden";
-                if (numBestMoves.innerHTML === "no games yet" || numCurrentMoves < numBestMoves) {
+                if (numCurrentMoves < numBestMoves) {
                     numBestMoves = numCurrentMoves;
                     bestMoves.innerHTML = "Personal best: " + numBestMoves + " moves";
                 }

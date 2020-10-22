@@ -21,8 +21,8 @@ body {
 }
 
 header {
-    height: 100px;
-    padding: 15px 0px;
+    height: 120px;
+    padding: 25px 0px;
     box-sizing: border-box;
 }
 
@@ -31,7 +31,7 @@ main {
     flex-direction: column;
     justify-content: center;
     width: 100vw;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 120px);
     padding: 30px 0px;
     box-sizing: border-box;
 }
@@ -43,6 +43,7 @@ div {
     margin: 0px;
     padding: 0px;
     justify-content: center;
+    text-align: center;
     box-sizing: border-box;
 }
 
@@ -53,46 +54,9 @@ h1 {
     margin: 0px;
 }
 
-h2 { 
-	font-size: 1.8rem;
-    font-weight: 200;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-align: center;
-    margin: 0px;
-}
-
-h3 {
-    font-size: 2rem;
-    text-align: center;
-    margin: 0px; 
-}
-
 p {
     text-align: center;
     margin: .5rem 0px; 
-}
-
-button {
-    height: 2.3rem;
-    width: 120px;
-    padding: 3px;
-    color: white;
-    font-size: 1.4rem;
-    text-transform: uppercase;
-    background-color: #222;
-    border: none;
-    border-radius: 5px;
-    margin: 10px;
-}
-
-button:hover {
-    cursor: pointer;
-    opacity: 0.80;
-}
-
-button:focus {
-    outline: 0;
 }
 
 
@@ -110,18 +74,21 @@ button:focus {
     position: absolute;
     height: 270px;
     width: 270px;
-    top: 200px;
+    top: 170px;
     left: calc(50% - 135px);
     visibility: visible;
 }
 
 #overlay {
     position: absolute;
+    z-index: 2;
     height: 270px;
     width: 270px;
-    top: 200px;
+    top: 170px;
     left: calc(50% - 135px);
-    z-index: 2;
+    border: 4px solid #bada55;
+    border-radius: 5px;
+    padding: 15px;
     visibility: hidden;
 }
 
@@ -132,14 +99,27 @@ button:focus {
 
 #new-game {
     color: #bada55;
-    font-size: 2.5rem;
+    font-size: 1.7em;
+    font-weight: 700;
+}
+
+#new-game:hover {
+    color: #d9fa6e;
     cursor: pointer;
 }
 
+#best {
+    position: absolute;
+    z-index: 1;
+    width: 270px;
+    height: 60px;
+    top: 610px;
+    left: calc(50% - 135px);
+}
+
 #best-moves {
-    color: #bada55;
-    font-size: 1.2rem;
     font-weight: 200;
+    letter-spacing: 2px;
     text-transform: uppercase;
 	margin: 0px;  
 }
@@ -152,19 +132,8 @@ button:focus {
     -webkit-text-fill-color: #222;
 }
 
-.above-grid {
-    display: flex;
-    flex-direction: column;
-    height: 80;
-    justify-content: center;
-}
 
-.below-grid {
-    display: flex;
-    flex-direction: column;
-    height: 100px;
-    justify-content: center;
-}
+
 
 /* LIGHTS */
 
