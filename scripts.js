@@ -13,11 +13,12 @@ window.addEventListener("load", function() {
 // DOM code for page elements
 function init() {
 
-    let lightColor = "#bada55" // badass!
+    let lightColors = ["#d4f764", "#fda16b", "#ffe56f", "#fc77a3", "#cb77fc", "#7784fc", "#77fcf1", "#77fc9f"];
     let base = "#222222";
     let numCurrentMoves = 0;
     let numBestMoves = 0;
     let gameOver = false;
+    let congratsOptions = ["Amazing!", "Outstanding!", "Stellar performance!", "Great job!", "Good work!", "You win!", "You did it!", "Woohoo!", "Hey, who turned the lights out?"];
 
     // get some objects from page
     let lightGrid = document.getElementById("light-grid");
@@ -25,6 +26,7 @@ function init() {
     let congrats = document.getElementById("congrats");
     let newGame = document.getElementById("new-game");
     let currentMoves = document.getElementById("current-moves");
+    let bestMoves = document.getElementById("best-moves");
 
     // initialize some stuff
     setLights();
@@ -37,13 +39,13 @@ function init() {
         if (rowIndex > 0) {
             group.push(document.getElementById("light" + (rowIndex - 1) + "-" + lightIndex)); // add light above
         } 
-        if (rowIndex < 4) {
+        if (rowIndex < 3) {
             group.push(document.getElementById("light" + (rowIndex + 1) + "-" + lightIndex)); // add light below
         }
         if (lightIndex > 0) {
             group.push(document.getElementById("light" + rowIndex + "-" + (lightIndex - 1))); // add light to left
         } 
-        if (lightIndex < 4) {
+        if (lightIndex < 3) {
             group.push(document.getElementById("light" + rowIndex + "-" + (lightIndex + 1))); // add light to right
         }
         return group; // objects relating to specific div elements on page
@@ -52,27 +54,39 @@ function init() {
     // Toggles group of lights based on single light in center of plus sign formation
     function toggleLights(light) {
         let groupAffected = groupLights(light);
+        let lightColor;
         for (let i=0; i < groupAffected.length; i++) {
-            if (rgbToHex(groupAffected[i].style.backgroundColor) === base) {
+            let currentColor = rgbToHex(groupAffected[i].style.backgroundColor);
+            console.log(currentColor); // test - getting from page
+            if (currentColor === base) {
+                lightColor = lightColors[randomize(lightColors.length)] // new random color for each light
                 groupAffected[i].style.backgroundColor = lightColor;
                 groupAffected[i].style.border = "2px solid " + lightColor;
-                groupAffected[i].style.boxShadow = "0px 0px 15px 0px " + lightColor;
-                groupAffected[i].style.animation = "pulse 3s infinite";
+                // groupAffected[i].style.boxShadow = "0px 0px 15px 0px " + lightColor;
+                // groupAffected[i].style.animation = "pulse " + randomize(4, 2, 1) + "s infinite"; // offset light pulsing
             } else {
                 groupAffected[i].style.backgroundColor = base;
                 groupAffected[i].style.border = "2px solid " + "#333";
-                groupAffected[i].style.boxShadow = "none";
-                groupAffected[i].style.animation = "none";
+                // groupAffected[i].style.boxShadow = "none";
+                // groupAffected[i].style.animation = "none";
             }
         } 
     }
 
     // Create random arrangment for new game
     function setLights() {
+        // Set all lights back to base color
         for (let i=0; i < lights.length; i++) {
+            console.log("Setting light " + lights[i].id + " to base");
+            lights[i].style.backgroundColor = base; 
+            lights[i].style.borderColor = "#333";
+        }
+        // Select some at random to generate toggles
+        for (let j=0; j < lights.length; j++) {
             let selection = randomize(2);
             if (selection === 0) {
-                toggleLights(lights[i]);
+                console.log("selected for random color")
+                toggleLights(lights[j]);
             }
         }
         // prevent the rare possibility of starting with all lights off
@@ -84,11 +98,22 @@ function init() {
     // Check to see if all lights are out (win!)
     function checkLights() {
         for (let i=0; i < lights.length; i++) {
-            if (rgbToHex(lights[i].style.backgroundColor) === lightColor) {
+            if (lightColors.includes(rgbToHex(lights[i].style.backgroundColor))) {
                 return false;
             }
         }
         return true; // if all lights were dark
+    }
+
+    // Choose congrats message based on number of moves
+    function getCongrats(moves) {
+        if (moves >= 90) {
+            return congratsOptions[8];
+        } else if (moves < 21) {
+            return congratsOptions[0];
+        } else {
+            return congratsOptions[Math.ceil(moves/10)-2];
+        }
     }
 
     // Use event delegation to listen for any click events
@@ -98,14 +123,15 @@ function init() {
         if (event.target.matches(".light") && !gameOver) {
             toggleLights(event.target);
             numCurrentMoves += 1;
+            console.log(numCurrentMoves); // testing
             if (checkLights()) {
                 gameOver = true;
                 lightGrid.style.cursor = "default";
-                congrats.innerHTML = "YOU WIN!!!";
+                congrats.innerHTML = getCongrats(numCurrentMoves);
                 congrats.style.fontWeight = "700";
                 newGame.innerHTML = "New game?";
                 currentMoves.innerHTML = "You completed that round in " + numCurrentMoves + " moves.";
-                if (numCurrentMoves < numBestMoves) {
+                if (numBestMoves.innerHTML === "no games yet" || numCurrentMoves < numBestMoves) {
                     numBestMoves = numCurrentMoves;
                     bestMoves.innerHTML = numBestMoves + " moves";
                 }
@@ -148,8 +174,9 @@ function init() {
         return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
     }
 
-    function randomize(max) {
-        return Math.floor(Math.random()*max);
+    function randomize(max = 100, min = 0, dec = 0) {
+        let factor = 10 ** dec;
+        return Math.floor(factor * Math.random() * (max - min)) / factor + min;
     }
 
 }

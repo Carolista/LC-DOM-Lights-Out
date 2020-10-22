@@ -118,8 +118,8 @@ button:focus {
 #light-grid {
     display: flex;
     flex-direction: column;
-    height: 300px;
-    width: 300px;
+    height: 360px;
+    width: 360px;
     justify-content: center;
     align-items: center;
     align-self: center;
@@ -171,27 +171,31 @@ button:focus {
 /* LIGHTS */
 
 .light {
-    background-color: #bada55; /* badass */
-    height: 50px;
-    width: 50px;
+    background-color: #222;
+    height: 60px;
+    width: 60px;
     margin: 3px;
-    border: 2px solid #bada55; /* more badass */
+    border: 2px solid #333; 
     border-radius: 3px;
-    box-shadow: 0px 0px 15px 0px #bada55; /* even more badass! */  
-    animation: pulse 3s infinite;  
+    transform: scale(1);
+    /* box-shadow: 0px 0px 0px 0px #333;  */
+    /* animation: pulse 3s infinite;   */
 }
-
 
 @keyframes pulse {
 	0% {
-		box-shadow: 0 0 15px 0px rgba(186, 218, 85, 0.2);
+		/* box-shadow: 0 0 15px 0px rgba(255, 255, 255, 0.2); */
 	}
 
 	40% {
-		box-shadow: 0 0 15px 2px rgba(186, 218, 85, 0.8);
+		/* box-shadow: 0 0 15px 2px rgba(255, 255, 255, 0.8); */
 	}
 
 	100% {
-		box-shadow: 0 0 15px 0px rgba(186, 218, 85, 0.2);
+		/* box-shadow: 0 0 15px 0px rgba(255, 255, 255, 0.2); */
 	}
 }
+
+/* .test {
+    color: #d4f764", "#fda16b", "#ffe56f", "#fc77a3", "#cb77fc", "#7784fc", "#77fcf1", "#77fc9f";
+} */
