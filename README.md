@@ -1,6 +1,6 @@
 # LC-DOM-Lights-Out
 
-To get my OWN practice with the DOM - I created a simple version of a classic logic game, Lights Out! 
+To get my OWN practice with the DOM - I created a simple version of a classic logic game, Lights Out! Bonus features: random color assignments and animated glow mode.
 
 Students - if you're ready to dive into the somewhat-less-shallow end, FORK this to your own account and then clone down to your local machine.
 

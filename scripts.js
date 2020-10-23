@@ -1,7 +1,7 @@
 /**** LIGHTS OUT ****/
 
 /*
-    My own little take on the classic game of Lights Out, just to experiment with the DOM
+    My own little take on the classic game of Lights Out, just to experiment with the DOM and some CSS animation
 */
 
 // Event listener for page load
@@ -14,13 +14,14 @@ window.addEventListener("load", function() {
 function init() {
 
     let lightColors = ["#d4f764", "#fda16b", "#ffe56f", "#fc77a3", "#cb77fc", "#7784fc", "#77fcf1", "#77fc9f"];
+    let glowModeOn = true;
     let base = "#222222";
     let numCurrentMoves = 0;
     let numBestMoves = 999999999999999999; /* God help the person who breaks this */
     let gameOver = false;
     let congratsOptions = ["Simply Amazing!", "Outstanding!", "Stellar performance!", "Great job!", "Good work!", "Hey, you won!", "You did it!", "Woohoo!", "Hey, who turned the lights out?"];
 
-    // get some objects from page
+    // Get some objects from page
     let lightGrid = document.getElementById("light-grid");
     let lights = document.getElementsByClassName("light");
     let congrats = document.getElementById("congrats");
@@ -29,7 +30,7 @@ function init() {
     let overlay = document.getElementById("overlay");
     let gameBoard = document.getElementById("game-board");
 
-    // initialize some stuff
+    // Initialize board
     setLights();
 
     // Gather group of lights (3-5) that form plus shape on grid, based around center light
@@ -55,20 +56,24 @@ function init() {
     // Toggles group of lights based on single light in center of plus sign formation
     function toggleLights(light) {
         let groupAffected = groupLights(light);
+        let index;
         let lightColor;
         for (let i=0; i < groupAffected.length; i++) {
             let currentColor = rgbToHex(groupAffected[i].style.backgroundColor);
             if (currentColor === base) {
-                lightColor = lightColors[randomize(lightColors.length)] // new random color for each light
+                index = randomize(lightColors.length);
+                lightColor = lightColors[index]; // new random color for each light
                 groupAffected[i].style.backgroundColor = lightColor;
                 groupAffected[i].style.border = "2px solid " + lightColor;
-                // groupAffected[i].style.boxShadow = "0px 0px 15px 0px " + lightColor;
-                // groupAffected[i].style.animation = "pulse " + randomize(4, 2, 1) + "s infinite"; // offset light pulsing
+                if (glowModeOn) {
+                    // groupAffected[i].style.boxShadow = "0px 0px 15px 0px " + lightColor;
+                    groupAffected[i].style.animation = "pulse" + index + " " + randomize(4, 2, 1) + "s infinite"; // offset light pulsing and select matching color
+                }
             } else {
                 groupAffected[i].style.backgroundColor = base;
                 groupAffected[i].style.border = "2px solid " + "#333";
                 // groupAffected[i].style.boxShadow = "none";
-                // groupAffected[i].style.animation = "none";
+                groupAffected[i].style.animation = "none";
             }
         } 
     }
@@ -90,6 +95,23 @@ function init() {
         // prevent the rare possibility of starting with all lights off
         if (checkLights()) {
             setLights(); // recursive
+        }
+    }
+
+    // Toggle glow mode mid-game
+    function toggleGlow() {
+        let color;
+        let index;
+        for (let i=0; i < lights.length; i++) {
+            color = rgbToHex(lights[i].style.backgroundColor);
+            if (color !== base) { 
+                index = lightColors.indexOf(color);
+                if (glowModeOn) {
+                    lights[i].style.animation = "pulse" + index + " " + randomize(4, 2, 1) + "s infinite";
+                } else {
+                    lights[i].style.animation = "none";
+                }
+            }
         }
     }
 
@@ -125,7 +147,7 @@ function init() {
                 gameOver = true;
                 lightGrid.style.cursor = "default";
                 congrats.innerHTML = getCongrats(numCurrentMoves);
-                currentMoves.innerHTML = "Round completed in <strong>" + numCurrentMoves + "</strong> moves.";
+                currentMoves.innerHTML = "Round completed in <strong>" + numCurrentMoves + "</strong> moves."
                 overlay.style.visibility = "visible";
                 gameBoard.style.visibility = "hidden";
                 if (numCurrentMoves < numBestMoves) {
@@ -143,6 +165,25 @@ function init() {
             overlay.style.visibility = "hidden";
             lightGrid.style.cursor = "pointer";
             numCurrentMoves = 0;
+        }
+
+        // When user toggles Glow Mode
+        if (event.target.id === "mode-switch") {
+            if (glowModeOn) {
+                glowModeOn = false;
+                toggleGlow();
+                event.target.innerHTML = "&nbsp;OFF&nbsp;";
+                event.target.style.backgroundColor = "white";
+                event.target.style.animation = "none"
+                overlay.style.animation = "none"
+            } else {
+                glowModeOn = true;
+                toggleGlow();
+                event.target.innerHTML = "&nbsp;ON&nbsp;";
+                event.target.style.backgroundColor = lightColors[0];
+                event.target.style.animation = "pulse0 3s infinite";
+                overlay.style.animation = "pulse0 3s infinite";
+            }
         }
 
     });
